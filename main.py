@@ -71,13 +71,13 @@ if  __name__ == '__main__':
         )
 
         trainloader = DataLoader(train_dataset, batch_size=batch_size_vae, shuffle=True)
-        testloader = DataLoader(test_dataset, batch_size=batch_size_vae,)
+        testloader = DataLoader(test_dataset, batch_size=batch_size_vae, shuffle=True)
         lr = 0.001
         epochs = 50
         model = ConvVAE().to(device)
         optimizer = optim.Adam(model.parameters(), lr=lr)
         criterion = nn.BCELoss(reduction='sum')
-        
+        # print(trainloader.batch_size, testloader.batch_size)
         fully_train_vae(model, trainloader, testloader, train_dataset, test_dataset, optimizer, criterion, epochs, device)
     
     if not os.path.exists(path_wgan):
@@ -108,3 +108,4 @@ if  __name__ == '__main__':
         loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
         train_wgan(gen, critic, opt_gen, opt_critic, loader, NUM_EPOCHS, critic_iterations, Z_DIM, WEIGHT_CLIP, device)
+    print('everything is already train, just predict or generate something')

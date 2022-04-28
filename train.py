@@ -68,10 +68,12 @@ def validate_vae(model, dataloader, dataset, device, criterion):
     model.eval()
     running_loss = 0.0
     counter = 0
+    # print(dataloader.batch_size)
     with torch.no_grad():
         for i, data in tqdm(enumerate(dataloader), total=int(len(dataset)/dataloader.batch_size)):  
             counter += 1
             data = data[0]
+            # print(data.shape)
             data = data.to(device)
             reconstruction, mu, logvar = model(data)
             bce_loss = criterion(reconstruction, data)
@@ -79,7 +81,7 @@ def validate_vae(model, dataloader, dataset, device, criterion):
             running_loss += loss.item()
 
             # save the last batch input ad output of every epoch
-            if i == len(dataloader) -1 :
+            if i == len(dataloader) -2 :
                 recon_images = reconstruction
                 original_images = data
     val_loss = running_loss / counter
@@ -101,7 +103,8 @@ def fully_train_vae(model, trainloader, testloader, train_dataset, test_dataset,
         )
         train_loss.append(train_epoch_loss)
         valid_loss.append(valid_epoch_loss)
-
+        # print(recon_images.shape, 'recons')
+        # print(original_images.shape, 'original')
         #save the reconstructed image from the validation loop
         save_reconstructed_images(recon_images, epoch+1, 'vae')
         save_original_images(original_images, epoch+1, 'vae')
