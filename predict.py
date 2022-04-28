@@ -59,7 +59,7 @@ def predict_vae(image_idx, verbose=False):
     )
     image = test_dataset[image_idx][0]
     image = image.unsqueeze(0)
-    x_hat = model(image)
+    x_hat, _, _ = model(image)
     Path("figures/ae/").mkdir(parents=True, exist_ok=True)
     save_image(image.cpu(), "figures/vae/test_" + str(image_idx) + "_ae_original.jpg")
     save_image(x_hat.cpu(), "figures/vae/test_" + str(image_idx) + "_ae_suggest.jpg")
