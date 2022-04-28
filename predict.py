@@ -66,19 +66,26 @@ def predict_vae(image_idx, verbose=False):
     
 
 def predict_wgan(image_idx, verbose=False):
+    CHANNELS_IMG = 1
+    Z_DIM = 100 
+    FEATURES_GEN = 64
+
     image_size = args.image_size
     data_path = args.data_path
     path_model = args.path_wgan_model
 
-    model = Generator()
-    model.load_state_dict(torch.load(path_model))
+    model = Generator(Z_DIM, CHANNELS_IMG, FEATURES_GEN)
+    model.load_state_dict(torch.load(path_model, map_location='cpu'))
     model.eval()
     test_dataset = datasets.MNIST(
         root=data_path, train=False, transform=transform_wgan, download=True
     )
     image = test_dataset[image_idx][0]
     image = image.unsqueeze(0)
-    x_hat = model(image)
+    cur_batch_size = image.shape[0]
+    noise = torch.randn(cur_batch_size, Z_DIM, 1, 1)
+    print(image.shape)
+    x_hat = model(noise)
     Path("figures/ae/").mkdir(parents=True, exist_ok=True)
     save_image(image.cpu(), "figures/wgan/test_" + str(image_idx) + "_ae_original.jpg")
     save_image(x_hat.cpu(), "figures/wgan/test_" + str(image_idx) + "_ae_suggest.jpg")

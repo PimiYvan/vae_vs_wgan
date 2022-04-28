@@ -1,5 +1,5 @@
-# Cat vs. dog classifier
+# VAE vs. WGAN
 
-Int this project, we are going to build a classifier that classifies whether an image is cat or dog 
+In this project, we are going to study and compare how to use Variational autoencoding and WGAN
 
 # Run the project 
