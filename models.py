@@ -96,7 +96,7 @@ class ConvVAE(nn.Module):
     def reparameterize(self, mu, log_var):
         std = torch.exp(0.5 * log_var)
         eps = torch.randn_like(std)
-        sample = mu + (eps + std)
+        sample = mu + (eps * std)
         return sample
 
     def forward(self, x):
